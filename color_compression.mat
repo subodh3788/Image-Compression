@@ -1,0 +1,39 @@
+# Read jpg file
+A = imread('Food.jpg');
+#Convert to A to double
+A = im2double(A);
+
+imshow(A) #if you want to see
+
+# Color Channels 
+R = A(:, :, 1);
+G = A(:, :, 2);
+B = A(:, :, 3);
+ 
+# Perform svd
+[UR,SR,VR] = svd(R);
+[UG,SG,VG] = svd(G); 
+[UB,SB,VB] = svd(B); 
+ 
+DR = UR*SR*VR'; 
+DG = UG*SG*VG'; 
+DB = UB*SB*VB'; 
+ 
+#Create new matrix 
+
+figure('Position',[50 50 800 800])
+subplot(1,2,1)
+M=zeros(854,1280,3);  
+M(:,:,1) = DR; 
+M(:,:,2) = DG; 
+M(:,:,3) = DB; 
+imshow(M); title ('Original Image') 
+subplot(1,2,2) 
+k = 10;  #k value for red
+k1=12;   #k value for green
+k2=13;   #k value for Blue
+Mk(:, :, 1) = UR(:,1:k)*SR(1:k, 1:k)* VR(:,1:k)';
+Mk(:, :, 2) = UG(:,1:k1)*SG(1:k1, 1:k1)* VG(:,1:k1)';
+Mk(:, :, 3) = UB(:,1:k2)*SB(1:k2, 1:k2)* VB(:,1:k2)';
+  set(gcf,'Position', [1400 100 3*550 3*250])
+imshow(Mk); title(['k=',num2str(k,'%d')]);
