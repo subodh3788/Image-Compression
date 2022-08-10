@@ -1,0 +1,44 @@
+B=imread("Image2.jpg"); #read image
+BG=rgb2gray(B); #convert to grayscale
+imshow(BG) #see what it looks like
+
+m1=size(B,1); n1=size(B,2);
+I2 = im2double(BG);
+subplot(2,2,1)  #plots multiple images 
+imagesc(I2), axis off
+colormap gray
+title('original');
+set(gcf, 'position',[1400 200 2200 1900])
+[U,S,V]=svd(I2,'econ');  #singular value decomposition
+ind=2;
+
+for k=[10 150 30]. #for each k we will see what it looks like
+    I2approx=U(:,1:k)*S(1:k,1:k)*V(:,1:k)';
+    subplot(2,2,ind),ind = ind +1;
+    imagesc(I2approx), axis off, colormap gray;
+    title(['k=',num2str(k,'%d'),',','size=',num2str(k*(m1+n1+1)/(m1*n1),'%2.2f')]);
+end
+
+
+#Now we will check a graph (elbow shaped) to find an appropriate k
+figure, subplot(1,2,1)
+semilogy(diag(S), 'k','LineWidth',2), grid on
+xlabel('k')
+ylabel('Singular value, \sigma_k')
+set(gca, 'FontSize', 14)
+subplot(1,2,2)
+plot(cumsum(diag(S))/sum(diag(S)),'k','Linewidth',2), grid on
+xlabel('k')
+ylabel('Cummulative storage/usefulInfo')
+xlim([-50 1000]); ylim([0 1.1])
+set(gca,'FontSize',14)
+set(gcf,'Position', [1400 100 3*550 3*240])
+
+
+
+
+#put them back together
+F=U(:,1:k9)*S(1:k9,1:k9)*V(:,1:k9)' 
+
+
+imshow(F);size(V)
